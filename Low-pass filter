@@ -1,0 +1,80 @@
+% Lowpass
+% Parameters
+Fs = 44100;          % Sampling rate (Hz)
+nBits = 16;          % Number of bits per sample
+nChannels = 1;       % Number of audio channels (1 for mono, 2 for stereo)
+duration = 10;        % Recording duration in seconds
+
+% Create an audiorecorder object
+recObj = audiorecorder(Fs, nBits, nChannels);
+
+% The user and start recording
+disp('Start speaking...');
+recordblocking(recObj, duration);
+disp('Recording finished.');
+
+% Retrieve the recorded audio data
+audioData = getaudiodata(recObj);
+
+% Save the audio as a .wav file
+filename = 'recorded_audio.wav';
+audiowrite(filename, audioData, Fs);
+disp(['Audio saved as ', filename]);
+
+% Load or create a sample noisy signal
+audio = audioData;      % [audio, Fs] = audioread('recorded_audio.wav');
+Fpass1 = 300;           % frequency bound of signal (Hz)
+Order = 4;              % Filter order
+
+% Design a band-pass filter to retain only desired frequencies
+[b, a] = butter(Order, Fpass1/(Fs/2), 'low');
+filtered_audio = filter(b, a, audio);
+
+% Listen to the result
+disp('Playing original audio...');
+sound(audio, Fs);
+disp('End');
+disp('Playing filtered audio...');
+sound(filtered_audio, Fs);
+disp('End');
+
+% Plot the original and filtered signals for comparison
+t = (0:length(audio)-1) / Fs;
+subplot(4,1,1);
+plot(t, audio);
+title('Original Noisy Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+%frequency domain
+audio_fft = fft(audio);
+f = (0:length(audio)-1)*(Fs/length(audio));
+magnitude = abs(audio_fft);
+subplot(4,1,2);
+plot(f, magnitude);
+title('Frequency Domain Representation');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+
+subplot(4,1,3);
+plot(t, filtered_audio);
+title('Filtered Signal (low-Pass)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+%frequency domain
+audio_fft_ = fft(filtered_audio);
+f = (0:length(filtered_audio)-1)*(Fs/length(filtered_audio));
+magnitude_ = abs(audio_fft_);
+subplot(4,1,4);
+plot(f, magnitude_);
+title('Frequency Domain Representation filtered signal');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+
+% Save the audio as a .wav file
+filenam = 'filtered_audio.wav';
+audiowrite(filenam, filtered_audio, Fs);
+disp(['Audio saved as ', filenam]);
+
+
