@@ -51,6 +51,17 @@ Mobile application version
 This project demonstrates how Audio Signal Processing plays a vital role in modern technology. It provides hands-on experience with digital signal techniques and shows how mathematical concepts can be applied to solve real-world audio problems.
 
 <h4>👩‍💻 Team</h4>
+Majji Sai Teja
+<br>
+Nakkina Charishma Priya
+<br>
+Singamala Karthik Reddy
+<br>
+Koorakula Anjana
+<br>
+Dukka Swathi
+<br>
+Pullagura Nithin
 
 
 
